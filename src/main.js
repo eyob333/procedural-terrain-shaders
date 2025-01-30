@@ -1,6 +1,11 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js'
+import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
+import {Brush, Evaluator, SUBTRACTION} from 'three-bvh-csg'
+import terrainVertexShader from './shaders/terrain/vertex.glsl'
+import terrainFragmentShader from './shaders/terrain/fragment.glsl'
+
 import GUI from 'lil-gui'
 
 /**
@@ -25,20 +30,51 @@ const rgbeLoader = new RGBELoader()
 rgbeLoader.load('/spruit_sunrise.hdr', (environmentMap) =>
 {
     environmentMap.mapping = THREE.EquirectangularReflectionMapping
-
     scene.background = environmentMap
     scene.backgroundBlurriness = 0.5
     scene.environment = environmentMap
 })
 
 /**
- * Placeholder
+ * Tarrian
  */
-const placeholder = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(2, 5),
-    new THREE.MeshPhysicalMaterial()
-)
-scene.add(placeholder)
+//geometry
+const geometry = new THREE.PlaneGeometry(10, 10, 500, 500)
+geometry.rotateX(-Math.PI * .5)
+
+//mateial 
+const material = new CustomShaderMaterial({
+    baseMaterial: THREE.MeshStandardMaterial,
+    vertexShader: terrainVertexShader,
+    fragmentShader: terrainFragmentShader,
+    metalness: 5,
+    roughness: 7,
+    // color: 
+})
+
+//mesh
+const terrian = new THREE.Mesh(geometry, material)
+scene.add(terrian)
+
+
+/// Brushes
+const boardhFill = new Brush(new THREE.BoxGeometry(11, 2, 11))
+const boardhHole = new Brush(new THREE.BoxGeometry( 10, 2.5, 10))
+
+/// Evaluator
+const evaluator = new Evaluator()
+const board = evaluator.evaluate(boardhFill, boardhHole, SUBTRACTION)
+
+board.geometry.clearGroups()
+board.material = new THREE.MeshStandardMaterial({
+    color: '#ffffff',
+    roughness: 1,
+    metalness: 0
+})
+board.castShadow = true
+board.receiveShadow = true
+scene.add(board)
+
 
 /**
  * Lights
