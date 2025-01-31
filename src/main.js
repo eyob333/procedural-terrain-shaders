@@ -40,6 +40,9 @@ rgbeLoader.load('/spruit_sunrise.hdr', (environmentMap) =>
  */
 //geometry
 const geometry = new THREE.PlaneGeometry(10, 10, 500, 500)
+geometry.deleteAttribute('uv')
+geometry.deleteAttribute('normal')
+
 geometry.rotateX(-Math.PI * .5)
 
 //mateial 
@@ -47,9 +50,9 @@ const material = new CustomShaderMaterial({
     baseMaterial: THREE.MeshStandardMaterial,
     vertexShader: terrainVertexShader,
     fragmentShader: terrainFragmentShader,
-    metalness: 5,
-    roughness: 7,
-    // color: 
+    metalness: 0.,
+    roughness: .5,
+    color: '#85d534'
 })
 
 //mesh

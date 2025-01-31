@@ -1,8 +1,22 @@
 #include ../includes/simplexNoise2d.glsl
 
+// uniform float uPositionFrequency;
+
+
 float getElevation( vec2 position){
+    float uPositionFrequency = .2;    
+    float uWarpFrequency = .5;
+    float uStrength = 2.;
+
     float elevation = 0.;
-    elevation += simplexNoise2d(position);
+    elevation += simplexNoise2d(position * uPositionFrequency) * .5;
+    elevation += simplexNoise2d(position * uPositionFrequency * 2.) * .25 ;
+    elevation += simplexNoise2d(position * uPositionFrequency * 4.) * .125;
+
+    float elevationSign = sign(elevation);
+    elevation = pow(abs(elevation), 2.) * elevationSign;
+    elevation *= uStrength;
+
     return elevation;
 }
 
