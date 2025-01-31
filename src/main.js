@@ -45,6 +45,15 @@ geometry.deleteAttribute('normal')
 
 geometry.rotateX(-Math.PI * .5)
 
+const uniforms = {
+    uPositionFrequency: new THREE.Uniform(.2),
+    uWarpFrequency: new THREE.Uniform(5.),
+    uWarpStrength: new THREE.Uniform(.5),
+    uStrength: new THREE.Uniform(2.),
+    uTime: new THREE.Uniform(0),
+    uTimeSpeed: new THREE.Uniform(0.2)
+}
+
 //mateial 
 const material = new CustomShaderMaterial({
     baseMaterial: THREE.MeshStandardMaterial,
@@ -52,13 +61,29 @@ const material = new CustomShaderMaterial({
     fragmentShader: terrainFragmentShader,
     metalness: 0.,
     roughness: .5,
-    color: '#85d534'
+    color: '#85d534',
+    uniforms
+})
+const depthMaterial = new CustomShaderMaterial({
+    baseMaterial: THREE.MeshStandardMaterial,
+    vertexShader: terrainVertexShader,
+    fragmentShader: terrainFragmentShader,
+    uniforms
 })
 
 //mesh
 const terrian = new THREE.Mesh(geometry, material)
+terrian.receiveShadow = true
+terrian.castShadow = true
+terrian.customDepthMaterial = depthMaterial
 scene.add(terrian)
 
+// debug
+gui.add(uniforms.uPositionFrequency, 'value').min(0).max(10).step(0.001).name('uPositionFrequency')
+gui.add(uniforms.uStrength, 'value').min(0).max(10).step(0.001).name('uStrength')
+gui.add(uniforms.uWarpFrequency, 'value').min(0).max(10).step(0.001).name('uWrapFrequency')
+gui.add(uniforms.uWarpStrength, 'value').min(0).max(10).step(0.001).name('uWrapStrength')
+gui.add(uniforms.uTimeSpeed, 'value').min(0).max(10).step(0.001).name('uTimeSpeed')
 
 /// Brushes
 const boardhFill = new Brush(new THREE.BoxGeometry(11, 2, 11))
@@ -153,6 +178,8 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+    //uniforms
+    uniforms.uTime.value = elapsedTime
 
     // Update controls
     controls.update()
