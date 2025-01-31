@@ -7,6 +7,8 @@ uniform float uWarpStrength;
 uniform float uTime;
 uniform float uTimeSpeed;
 
+varying vec3 vPosition;
+
 float getElevation( vec2 position){
     float elevation = 0.;
     vec2 wrapPositon = position;
@@ -40,6 +42,7 @@ void main(){
     vec3 toB = normalize(positionB - csm_Position);
 
     csm_Normal = cross(toA, toB);
+    vPosition = csm_Position;
 
 
 }

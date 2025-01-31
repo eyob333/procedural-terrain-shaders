@@ -39,11 +39,18 @@ rgbeLoader.load('/spruit_sunrise.hdr', (environmentMap) =>
  * Tarrian
  */
 //geometry
-const geometry = new THREE.PlaneGeometry(10, 10, 500, 500)
+const geometry = new THREE.PlaneGeometry(10, 10, 400, 400)
 geometry.deleteAttribute('uv')
 geometry.deleteAttribute('normal')
-
 geometry.rotateX(-Math.PI * .5)
+
+debugObject.colorWaterDeep = '#002b3d'
+debugObject.colorWaterSurface = '#66a8ff'
+debugObject.colorSand = '#ffe894'
+debugObject.colorGrass= '#85d534'
+debugObject.colorSnow = '#ffffff'
+debugObject.colorRock= '#bfbd8d'
+
 
 const uniforms = {
     uPositionFrequency: new THREE.Uniform(.2),
@@ -51,7 +58,15 @@ const uniforms = {
     uWarpStrength: new THREE.Uniform(.5),
     uStrength: new THREE.Uniform(2.),
     uTime: new THREE.Uniform(0),
-    uTimeSpeed: new THREE.Uniform(0.2)
+    uTimeSpeed: new THREE.Uniform(0.2),
+    uWaterDeepColor: new THREE.Uniform( new THREE.Color(debugObject.colorWaterDeep)),
+    uWaterSurfaceColor: new THREE.Uniform( new THREE.Color(debugObject.colorWaterSurface)),
+    uSandColor: new THREE.Uniform( new THREE.Color(debugObject.colorSand)),
+    uGrassColor: new THREE.Uniform( new THREE.Color(debugObject.colorGrass)),
+    uSnowColor: new THREE.Uniform( new THREE.Color(debugObject.colorSnow)),
+    uRockColor: new THREE.Uniform( new THREE.Color(debugObject.colorRock)),
+
+ 
 }
 
 //mateial 
@@ -84,6 +99,24 @@ gui.add(uniforms.uStrength, 'value').min(0).max(10).step(0.001).name('uStrength'
 gui.add(uniforms.uWarpFrequency, 'value').min(0).max(10).step(0.001).name('uWrapFrequency')
 gui.add(uniforms.uWarpStrength, 'value').min(0).max(10).step(0.001).name('uWrapStrength')
 gui.add(uniforms.uTimeSpeed, 'value').min(0).max(10).step(0.001).name('uTimeSpeed')
+
+gui.addColor( debugObject, 'colorWaterDeep')
+   .onChange( () => {uniforms.uWaterDeepColor.value.set(debugObject.colorWaterDeep)})
+
+gui.addColor( debugObject, 'colorWaterDeep')
+   .onChange( () => {uniforms.uWaterSurfaceColor.value.set(debugObject.colorWaterSurface)})
+
+ gui.addColor( debugObject, 'colorSand')
+   .onChange( () => {uniforms.uSandColor.value.set(debugObject.colorSand)})
+
+gui.addColor( debugObject, 'colorGrass')
+   .onChange( () => {uniforms.uGrassColor.value.set(debugObject.colorGrass)})
+
+gui.addColor( debugObject, 'colorSnow')
+   .onChange( () => {uniforms.uSnowColor.value.set(debugObject.co)})
+
+gui.addColor( debugObject, 'colorRock')
+   .onChange( () => {uniforms.uWaterDeepColor.value.set(debugObject.colorRock)})
 
 /// Brushes
 const boardhFill = new Brush(new THREE.BoxGeometry(11, 2, 11))
