@@ -1,3 +1,4 @@
+#include ../includes/simplexNoise2d.glsl
 
 uniform vec3 uWaterDeepColor;
 uniform vec3 uWaterSurfaceColor;
@@ -26,7 +27,9 @@ void main(){
     color = mix(color, uGrassColor, grassMix);
 
     //snow
-    float snowMix = step(.45, vPosition.y);
+    float snowThreshold = .45;
+    snowThreshold += simplexNoise2d(vPosition.xz * 15.) * .1;
+    float snowMix = step(snowThreshold, vPosition.y);
     color = mix(color, uSnowColor, snowMix);
 
     csm_DiffuseColor= vec4(color ,1.0);

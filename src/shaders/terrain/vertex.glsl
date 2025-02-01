@@ -43,6 +43,7 @@ void main(){
 
     csm_Normal = cross(toA, toB);
     vPosition = csm_Position;
+    vPosition.xz += uTime * uTimeSpeed;
 
 
 }

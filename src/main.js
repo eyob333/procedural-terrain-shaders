@@ -39,7 +39,7 @@ rgbeLoader.load('/spruit_sunrise.hdr', (environmentMap) =>
  * Tarrian
  */
 //geometry
-const geometry = new THREE.PlaneGeometry(10, 10, 400, 400)
+const geometry = new THREE.PlaneGeometry(10, 10, 500, 500)
 geometry.deleteAttribute('uv')
 geometry.deleteAttribute('normal')
 geometry.rotateX(-Math.PI * .5)
